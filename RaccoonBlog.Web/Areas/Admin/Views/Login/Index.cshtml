@@ -45,7 +45,9 @@
                          
                                 <b>Password&#160;&#160;&#160;&#160;</b>
                                 @Html.TextBoxFor(x => x.Password, new { style = "width: 200px;", id = "password", type = "password" })
-                                @Html.EditorFor(x => x.RememberMe)
+                                <br />
+                                @Html.CheckBoxFor(x=>x.RememberMe)
+                                @Html.LabelFor(x=>x.RememberMe)
                                 @Html.HiddenFor(x => x.ReturnUrl)
                                 <div id="errorDiv">
                                     <br />
