@@ -22,19 +22,20 @@ namespace HibernatingRhinos.Loci.Common.Models
 
 		[DataType(DataType.Password)]
 		[Display(Name = "Confirm new password")]
-		[Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+		[Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match")]
 		public string ConfirmPassword { get; set; }
 	}
 
 	public class LogOnModel
 	{
 
-		[Required]
-		[Email]
+        [Required(ErrorMessage = "Email is required")]
+        //[Email]
+        [DataType(DataType.EmailAddress)]
 		[Display(Name = "Login")]
 		public string Login { get; set; }
 
-		[Required]
+        [Required(ErrorMessage = "Password is required")]
 		[DataType(DataType.Password)]
 		[Display(Name = "Password")]
 		public string Password { get; set; }
@@ -69,7 +70,7 @@ namespace HibernatingRhinos.Loci.Common.Models
 
 		[DataType(DataType.Password)]
 		[Display(Name = "Confirm password")]
-		[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+		[Compare("Password", ErrorMessage = "The password and confirmation password do not match")]
 		public string ConfirmPassword { get; set; }
 
 		public string SendOutKey { get; set; }

@@ -12,8 +12,8 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
 		[HttpGet]
 		public ActionResult Index(string returnUrl)
 		{
-			if (Request.IsAuthenticated)
-			{
+            if (Request.IsAuthenticated)
+            {
 				return RedirectFromLoginPage();
 			}
 
@@ -24,11 +24,12 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
 		public ActionResult Index(LogOnModel input)
 		{
 			var user = RavenSession.GetUserByEmail(input.Login);
+            
 
 			if (user == null || user.ValidatePassword(input.Password) == false)
 			{
 				ModelState.AddModelError("UserNotExistOrPasswordNotMatch",
-				                         "Email and password do not match to any known user.");
+				                         "The email or password do not match to any known user.");
 			}
 			else if (user.Enabled == false)
 			{

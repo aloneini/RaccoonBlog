@@ -9,13 +9,14 @@ namespace RaccoonBlog.Web.Controllers
 		// GET: /Welcome/
 		public ActionResult Index()
 		{
+            return View();
 			return AssertConfigurationIsNeeded() ?? View(BlogConfig.New());
 		}
 
 		[HttpPost]
 		public ActionResult CreateBlog(BlogConfig config)
 		{
-			var result = AssertConfigurationIsNeeded();
+            var result = AssertConfigurationIsNeeded();// function that uses session so the blogConfig wouldn't get lost between pages
 			if (result != null)
 				return result;
 
@@ -64,7 +65,7 @@ namespace RaccoonBlog.Web.Controllers
 			// otherwise we might get a null BlogConfig even though a valid one exists
 			using (RavenSession.Advanced.DocumentStore.DisableAggressiveCaching())
 			{
-				bc = RavenSession.Load<BlogConfig>("Blog/Config");
+				bc = RavenSession.Load<BlogConfig>("Blog/Config");// use session so the blogConfig wouldn't get lost between pages
 			}
 
 			if (bc != null)
