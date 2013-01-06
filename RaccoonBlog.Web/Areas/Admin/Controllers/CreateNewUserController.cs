@@ -24,7 +24,7 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
         {
             User newUser = new User();
             newUser.Email = SendInfo.Email;
-            newUser.SetPassword(SendInfo.Email);
+            newUser.SetPassword(SendInfo.Password);
             RavenSession.Store(newUser);
 
             //return Json(new { success = true });
