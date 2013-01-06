@@ -1,0 +1,102 @@
+﻿@using HibernatingRhinos.Loci.Common.Models
+@using RaccoonBlog.Web.Models
+@model User
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>RaccoonBlog :: Create a new user</title>
+    <link rel="stylesheet" type="text/css" href="@Url.ActionLinkWithArray("Merge", "Css", new { files = new[] { "ResetCss.css", "custom/" + ViewBag.BlogConfig.CustomCss + ".settings.less.css", "base.less.css", "custom/" + ViewBag.BlogConfig.CustomCss + ".less.css" } })">
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Areas/Admin/Content/css/AdminStyle.css")">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+    </script>
+</head>
+<body id="create-bg">
+    <div id="create-holder">
+        <form id="divCreateNew" style="width: 350px">
+            <h1 style="color: #eb9a26">
+                <img src="@Url.Content("~/Content/css/images/logo-admin.png")" width="51" height="50" alt="Logo"/>
+              &#160;
+                Create a new user
+            </h1>
+            <div id="userCreated">
+                <div id="content-table-inner2" class="inputform">
+                    <div id="id-form">
+                        <p style="color:black">Admin will authorize your user</p><br/>
+                        <input type="button" id="close" value="close" style="width: 180px; font-size: 15px; color: #393939; font-weight: normal">
+                        <br />
+
+                    </div>
+                </div>
+            </div>
+            <div id="createNew-text">
+
+                <p style="line-height: 2.0; color: #2a2828">Please enter your email and password in order to create a new user</p>
+            </div>
+            <br />
+            <b>Email</b><br />
+           
+            <input name="Email" id="Email" size="25"> 
+            <br />
+            <br />
+            
+            <b>Password</b><br />
+            <input name="Password" id="Password" type="password" size="25">
+            <br />
+            <br />
+            <div>
+                <input type="button" id="createInput" value="Create user" style="width: 180px; font-size: 15px; color: #393939; font-weight: normal">
+                <img id="LoadingPic" src="@Url.Content("~/Content/css/images/ajax-loader%20(6).gif")" />
+                <a href="/admin/login" id="AReturn"><u style="color: black" id="returnToLogin">Return to login page</u></a>
+            </div>
+        </form>
+        
+    </div>
+    
+</body>
+</html>
+<script type="text/javascript">
+
+    $(function () {
+        $('#returnToLogin').mouseover(function () { $(this).css({ "color": "orange", "text-decoration": "underline" }) });
+        $('#returnToLogin').mouseout(function () { $(this).css({ "color": "black", "text-decoration": "none" }) });
+        $('#LoadingPic').hide();
+        $('#close').click(function () {
+            $('#content-table-inner2').fadeOut();
+            
+        });
+
+        $('#content-table-inner2').hide();
+        
+        $('#createInput').click(function () {
+                var mail = $('#Email').val();
+                var password = $('#Password').val();
+                var sendInfo = { Email: mail, Password: password };         
+            $.ajax({
+                url: "/admin/CreateNewUser/post",
+                type: "POST",
+                data: sendInfo,
+                dataType: "Json",
+                beforeSend: function () { $('#LoadingPic').show(); },
+                success: function () {
+                    $('#content-table-inner2').show();
+                    
+                },
+                error: function () { alert('Error');},
+                complete: function () { $('#LoadingPic').hide(); },
+                timeout: 10000
+            });
+        })
+        
+    })//END JQuery
+</script>
+
+
+
+
+

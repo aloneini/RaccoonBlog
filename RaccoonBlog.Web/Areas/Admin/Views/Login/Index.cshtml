@@ -1,4 +1,5 @@
 ﻿@using HibernatingRhinos.Loci.Common.Models
+
 @model LogOnModel
 @{
     Layout = null;
@@ -8,10 +9,10 @@
 <head>
     <meta charset="utf-8">
     <title>RaccoonBlog :: Login</title>
-    
+
     <link rel="stylesheet" type="text/css" href="@Url.ActionLinkWithArray("Merge", "Css", new { files = new[] { "ResetCss.css", "custom/" + ViewBag.BlogConfig.CustomCss + ".settings.less.css", "base.less.css", "custom/" + ViewBag.BlogConfig.CustomCss + ".less.css" } })">
     <link rel="stylesheet" type="text/css" href="@Url.Content("~/Areas/Admin/Content/css/AdminStyle.css")">
- 
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 </head>
 <body id="login-bg">
@@ -24,7 +25,7 @@
 
             <article id="user-input" style="width: 350px">
                 <form action="@Url.Action("Index")" method="post">
-                    
+
                     <div id="logo-login">
                         <a Id="picture" style="color:#D68C22;font-size:large" href="@Url.RouteUrl("homepage")">
                             <img src="@Url.Content("~/Content/css/images/logo-admin.png")" width="51" height="50" alt="Logo">
@@ -38,54 +39,62 @@
                         <div style="float: left; padding-left: 17px; font-size: 16px" class="login-form">
                             <br />
                             <div id="id-form" style="top: 0;">
-                               
+
                                 <b>User&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
                                 @Html.TextBoxFor(x => x.Login, new { style = "width: 200px;" })<br />
                                 <br />
-                         
+
                                 <b>Password&#160;&#160;&#160;&#160;</b>
-                                @Html.TextBoxFor(x => x.Password, new { style = "width: 200px;", id = "password", type = "password" })
-                                <br />
-                                @Html.CheckBoxFor(x=>x.RememberMe)
-                                @Html.LabelFor(x=>x.RememberMe)
+                                @Html.TextBoxFor(x => x.Password, new { style = "width: 200px;" , type = "password" })
+                                <br /><br />
+                                @Html.CheckBoxFor(x => x.RememberMe)
+                                @Html.LabelFor(x => x.RememberMe)
                                 @Html.HiddenFor(x => x.ReturnUrl)
                                 <div id="errorDiv">
                                     <br />
-                                    
+
                                     @if (ViewData.ModelState.IsValid == false)
                                     {                  
                                        
                                         <div class="form-error" style="color: red">
-
+                                            <br />
                                             @Html.ValidationSummary(false)
-                                         
 
                                         </div>
                                     }
                                 </div>
-                                <div style="float: right; width: 600px">
-                                    <input id="blockInput" style="width: 180px" type="submit" value="Login"><br /><br />
 
-                                    <u><a href="#" id="forgotPassword" style="color: black">Forgot your pasword</a></u>
+                                <div id="CreatUserDiv">
+                                    <br />
+                                    
+                                    <div style="float: right; width: 600px">
+                                        <input id="blockInput" style="width: 180px" type="submit" value="Login"><br />
+                                        <br />
+
+                                        <a href="#" id="forgotPassword"><b style="color: black" id="bForgotPassword">Forgot your pasword</b></a>&#160;&#160;&#160;&#160;
+                                    <a href="/admin/CreateNewUser" id="creatUser"><b style="color: black" id="linkCreateNew">Create new user</b></a>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
+                        <div id="wrapper">
+                 
+                            <div id="hidenDiv">
 
-                        <div id="hidenDiv">
-
-
-                            <div id="content-table-inner" class="inputform">
-
-                                <div id="id-form">
-                                    <div id="forgotbox-text">
-                                        <p style="line-height: 2.0; color:#2a2828">Please enter your email and a new password will be sent to you</p>
-                                    </div>
-                                    @Html.TextBoxFor(x => x.Login, new { style = "width: 200px;" })
-                                 
-                                    <div>
+                                <div id="content-table-inner" class="inputform">
+                                    <div id="id-form">
                                         <br />
-                                        <br />
-                                        <input type="submit" value="Reset password" style="width: 180px;font-size: 15px;color:#393939;font-weight:normal";>
+                                        <div id="forgotbox-text">
+                                            <p style="line-height: 2.0; color: #2a2828">Please enter your email and a new password will be sent to you</p>
+                                        </div>
+                                        @Html.TextBoxFor(x => x.Login, new { style = "width: 200px;" })
+
+                                        <div>
+                                            <br />
+                                            <br />
+                                            <input type="submit" value="Reset password" style="width: 180px; font-size: 15px; color: #393939; font-weight: normal">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -94,6 +103,7 @@
                     </div>
 
                 </form>
+                           
 
             </article>
             <div class="clear">
@@ -115,13 +125,19 @@
         $("#hidenDiv").css("display", "normal");
     }
     $(function () {
-       
-        $('#forgotPassword').mouseover(function () { $(this).css({ "color": "#cb7b07" }) });
-        $('#forgotPassword').mouseout(function () { $(this).css({ "color": "black" }) });
-        $('#alreadyText').mouseover(function () { $(this).css({ "color": "#DD9227" }) });
-        $('#alreadyText').mouseout(function () { $(this).css({ "color": "#cb7b07" }) });
+
+        $('#bForgotPassword').mouseover(function () { $(this).css({ "color": "#cb7b07", "text-decoration": "underline" }) });
+        $('#bForgotPassword').mouseout(function () { $(this).css({ "color": "black", "text-decoration": "none" }) });
+        $('#linkCreateNew').mouseover(function () { $(this).css({ "color": "#cb7b07", "text-decoration": "underline" }) });
+        $('#linkCreateNew').mouseout(function () { $(this).css({ "color": "black", "text-decoration": "none" }) });
+        $('#creatUser').mouseover(function () { $(this).css({ "color": "#cb7b07" }) });
+        $('#creatUser').mouseout(function () { $(this).css({ "color": "black" }) });
+        $('#alreadyText').mouseover(function () { $(this).css({ "color": "orange" }) });
+        $('#alreadyText').mouseout(function () { $(this).css({ "color": "#eb9a26" }) });
         $("#hidenDiv").hide();
-        $("#forgotPassword").toggle(function () { $("#hidenDiv").show() }, function () { $("#hidenDiv").hide() });
+        $("#divCreateNew").hide();
+        $("#forgotPassword").toggle(function () { $("#hidenDiv").fadeIn(200) }, function () { $("#hidenDiv").fadeOut(200) });
+        
         var $textarea = $('textarea[name$="Body"]').keydown(function () {
             $('.markdown-preview-container').show('medium');
         });

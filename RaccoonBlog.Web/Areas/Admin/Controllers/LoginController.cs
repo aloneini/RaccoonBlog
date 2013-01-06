@@ -45,7 +45,9 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
 			return View(new LogOnModel {Login = input.Login, ReturnUrl = input.ReturnUrl});
 		}
 
-		private ActionResult RedirectFromLoginPage(string retrunUrl = null)
+     
+        
+        private ActionResult RedirectFromLoginPage(string retrunUrl = null)
 		{
 			if (string.IsNullOrEmpty(retrunUrl))
 				return RedirectToRoute("homepage");

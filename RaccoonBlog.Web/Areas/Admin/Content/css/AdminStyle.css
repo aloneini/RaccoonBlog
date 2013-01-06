@@ -112,6 +112,7 @@ body
 	margin: 6px 0 0 8px;
 }
 
+
 	#logo a
 	{
 		display: block;
@@ -214,14 +215,83 @@ footer
 	}
 
 
+#wrapper
+{
+	width: 500px;
+	border: 1px;
+	overflow: hidden; /* will contain if #first is longer than #second */
+}
+
+#AReturn
+{
+	margin: 10px 0px auto 130px !important;
+}
+
+#divCreateNew
+{
+	font-weight: bold;
+	width: 500px !important;
+	float: left; /* add this */
+	border: 1px;
+	font-size: 15px;
+	margin: 20px 10px 10px 30px;
+	border-radius: 15px;
+	padding: 30px 20px 15px 50px;
+	float: left;
+	/* IE10 Consumer Preview */
+	background-image: -ms-radial-gradient(right bottom, ellipse farthest-side, #BABABA 0%, #575757 100%);
+	/* Mozilla Firefox */
+	background-image: -moz-radial-gradient(right bottom, ellipse farthest-side, #BABABA 0%, #575757 100%);
+	/* Opera */
+	background-image: -o-radial-gradient(right bottom, ellipse farthest-side, #BABABA 0%, #575757 100%);
+	/* Webkit (Safari/Chrome 10) */
+	background-image: -webkit-gradient(radial, right bottom, 0, right bottom, 973, color-stop(0, #BABABA), color-stop(1, #575757));
+	/* Webkit (Chrome 11+) */
+	background-image: -webkit-radial-gradient(right bottom, ellipse farthest-side, #BABABA 0%, #575757 100%);
+	/* W3C Markup, IE10 Release Preview */
+	background-image: radial-gradient(ellipse farthest-side at right bottom, #BABABA 0%, #575757 100%);
+}
+
 #content-table-inner
 {
+	border: 1px;
+	/*overflow: hidden;*/ /* if you don't want #second to wrap below #first */
+	float: left; /* add this */
 	font-size: 15px;
-	margin:20px 10px 10px 30px ;
+	margin: 20px 10px 10px 30px;
 	border-radius: 15px;
 	padding: 30px 20px 15px 30px;
 	float: left;
+	/* IE10 Consumer Preview */
+	background-image: -ms-radial-gradient(right bottom, ellipse farthest-side, #BABABA 0%, #575757 100%);
+	/* Mozilla Firefox */
+	background-image: -moz-radial-gradient(right bottom, ellipse farthest-side, #BABABA 0%, #575757 100%);
+	/* Opera */
+	background-image: -o-radial-gradient(right bottom, ellipse farthest-side, #BABABA 0%, #575757 100%);
+	/* Webkit (Safari/Chrome 10) */
+	background-image: -webkit-gradient(radial, right bottom, 0, right bottom, 973, color-stop(0, #BABABA), color-stop(1, #575757));
+	/* Webkit (Chrome 11+) */
+	background-image: -webkit-radial-gradient(right bottom, ellipse farthest-side, #BABABA 0%, #575757 100%);
+	/* W3C Markup, IE10 Release Preview */
+	background-image: radial-gradient(ellipse farthest-side at right bottom, #BABABA 0%, #575757 100%);
+}
+#LoadingPic
+{
+	position:absolute !important;
 	
+}
+#content-table-inner2
+{
+	position:absolute;
+	opacity:1;
+	border:  solid ;
+	/*overflow: hidden;*/ /* if you don't want #second to wrap below #first */
+	float: left; /* add this */
+	font-size: 15px;
+	margin: 20px 10px 10px 30px;
+	border-radius: 15px;
+	padding: 30px 20px 15px 30px;
+	float: left;
 	/* IE10 Consumer Preview */
 	background-image: -ms-radial-gradient(right bottom, ellipse farthest-side, #BABABA 0%, #575757 100%);
 	/* Mozilla Firefox */
@@ -267,6 +337,12 @@ footer
 	width: 164px;
 }
 
+#created
+{
+
+	padding:0px 150px 200px 150px !important;
+	border:solid;
+}
 
 #tbl-border-top
 {
@@ -1271,6 +1347,17 @@ form
 	margin: 10px auto auto auto;
 	vertical-align: top;
 }
+#create-bg
+{
+	background: url(../images/login/login_bg.jpg) no-repeat top center;
+	margin: 10px auto auto auto;
+	vertical-align: top;
+}
+
+#forgotPassword
+{
+	margin: auto auto auto 150px;
+}
 
 #picture
 {
@@ -1282,7 +1369,7 @@ form
 
 #alreadyText
 {
-	color: #cb7b07;
+	color: #eb9a26;
 }
 
 #login-holder
@@ -1291,6 +1378,11 @@ form
 	width: 508px;
 }
 
+#create-holder
+{
+	margin: 0px 100px 100px 600px !important;
+	width: 508px;
+}
 #loginbox
 {
 	background: url(../images/login/loginbox_bg.png) no-repeat;
@@ -1371,6 +1463,7 @@ form
 	padding: 6px 6px 0 10px;
 	width: 204px;
 }
+
 
 #logo-login
 {
@@ -1520,15 +1613,16 @@ a:hover.back-login
 
 .inputform
 {
-
 	padding: 100px 150px 200px;
 }
 
 	.inputform textarea, .inputform input[type=text], .form_item input[type=password] .form_item input[type=checkbox]
 	{
 		font-size: 12px;
-		
+		/*padding:4px 2px;*/
+		/*border:solid 1px #666;*/
 	}
+
 
 	.inputform input[type=submit]
 	{
