@@ -1,4 +1,5 @@
-﻿@using RaccoonBlog.Web.Models
+﻿@using System.Globalization
+@using RaccoonBlog.Web.Models
 @model PostInput
 @{
     ViewBag.Title = @Model.Title;
@@ -10,7 +11,16 @@
     </div>
 }
 <article id="user-input">
-    
+    <style>
+		/* css for timepicker */
+		.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+		.ui-timepicker-div dl { text-align: left; }
+		.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+		.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+		.ui-timepicker-div td { font-size: 90%; }
+		.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+	</style>
+
     <div id="page-heading">
         <h1>@(Model.IsNewPost() ? "Create a new post" : "Edit Post")</h1>
     </div>
@@ -20,48 +30,52 @@
 
             <div id="content-table-inner" class="inputform">
                 <div id="id-form" style="top: 0;">
-                    
-                 
+
+
                     @*first way*@
 
 
-                    @*         @Html.EditorFor(x => x.Title)
+@*                    @Html.EditorFor(x => x.Title)
                     @Html.TextAreaFor(x => x.Body, new { @class = "adminRichText" })
                     @Html.EditorFor(x => x.CreatedAt)
                     <b>Publish date:</b>
                     @Html.TextBoxFor(x => x.PublishAt)
-                    <br/>
+                    @Html.LabelFor(model => model.PublishAt)
+                    @Html.TextBox("When", Model.PublishAt.ToString("dd/MM/yyyy HH:mm", DateTimeFormatInfo.InvariantInfo))
+                    @Html.ValidationMessageFor(model => model.PublishAt)
+                    
+                    <br />
                     (If you won't enter a date the post will be published today)
-                      @Html.EditorFor(x => x.Tags)
-                    
-                     @Html.EditorFor(x => x.AllowComments)
-                        @Html.HiddenFor(x => x.Id)*@
-                    
+                    @Html.EditorFor(x => x.Tags)
+
+                    @Html.EditorFor(x => x.AllowComments)
+                    @Html.HiddenFor(x => x.Id)*@
+
 
                     @*Second way*@
-                    
 
-                    <br/>
-                    Title:
+                     <br />
+                    <b>Title:</b>
                     <input name="Title" id="Title" size="25">
-                    <br/>
-                    TextArea:
-                    <input name="TextArea" id="TextArea" size="25">
-                    <br/>
-                    Publish at:
-                    <input name="PublishAt" id="PublishAt" size="25">
-                    <br/>
-                    Tags:
+                    <br /><br/>
+                    <b>Text Area:</b> <br/>
+                    <textarea rows="15" cols="100" name="TextArea" id="TextArea" @*size="25"*@></textArea>
+                    <br /><br/>
+                   <b> Publish at:</b>
+                    <input type="text" name="PublishAt" id="PublishAt" size="27" />
+                    <br /><br/>
+                    <b>Tags:</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                     <input name="Tags" id="Tags" size="25">
-                    <br/>
-                    Allow Comments:
+                    <br /><br/>
+                    <b>Allow Comments </b>&nbsp&nbsp 
                     <input type="checkbox" name="AllowComments" id="AllowComments" size="25">
-                    <br/>
-                    
+                    <br /><br/>
+
 
 
                     <div>
                         <input id="UpdateBtn" type="submit" value="Update Post">
+                        <img id="LoadingPic" src="@Url.Content("~/Content/css/images/ajax-loader%20(6).gif")" />
                     </div>
                 </div>
             </div>
@@ -77,41 +91,47 @@
     <script type="text/javascript" src="@Url.Script("ckeditor/ckeditor.js")"></script>
     <script type="text/javascript" src="@Url.Script("ckeditor/adapters/jquery.js")"></script>
     <script type="text/javascript">
-        
 
 
-        jQuery(document).ready(function() {
+
+        jQuery(document).ready(function () {
             jQuery(".adminRichText").ckeditor();
+            $('#LoadingPic').hide();
+            $('#Title').focus();
+            $("#PublishAt").datepicker();
+            initialize();
+            $('#When').datetimepicker({
+                dateFormat: 'dd/mm/yy'
+            });
 
             // AJAX
-            $('#UpdateBtn').click(function() {
+            $('#UpdateBtn').click(function () {
                 var title = $('#Title').val();
-                var textArea = $('#TextArea').val();
+                var body = $('#TextArea').val();
                 var publishAt = $('#PublishAt').val();
                 var tags = $('#Tags').val();
+                debugger;
                 
-                //var  allowComments = $('#AllowComments').val();
-                if ($('#AllowComments').attr('checked')) {
-                    
-               
+
+
+                if ($('#AllowComments').attr('checked'))
                     var allowComments = 'yes';
-                }
                 else var allowComments = 'no';
-                    
-                
-                var sendInfo = { Title: title, TextArea: textArea, PublishAt: publishAt, Tags: tags, AllowComments: allowComments };
+
+
+                var sendInfo = { Title: title, Body: body, createdAt: 0, PublishAt: publishAt, Tags: tags, AllowComments: allowComments, Id: 0 };
                 $.ajax({
                     url: "/admin/Posts/Update",
                     type: "POST",
                     data: sendInfo,
                     dataType: "Json",
-                    beforeSend: function() { $('#LoadingPic').show(); },
-                    success: function() {
+                    beforeSend: function () { $('#LoadingPic').show(); },
+                    success: function () {
                         $('#content-table-inner2').show();
 
                     },
-                    error: function() { alert('Error'); },
-                    complete: function() { $('#LoadingPic').hide(); },
+                    error: function () { alert('Error'); },
+                    complete: function () { $('#LoadingPic').hide(); },
                     timeout: 10000
                 });
 
@@ -122,4 +142,4 @@
         });
 
     </script>
-    }
+}

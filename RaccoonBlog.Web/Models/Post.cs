@@ -12,110 +12,110 @@ using RaccoonBlog.Web.Infrastructure.Common;
 
 namespace RaccoonBlog.Web.Models
 {
-	public class Post : IDynamicContent
-	{
-		public Post()
-		{
-			ContentType = DynamicContentType.Html;
-		}
+    public class Post : IDynamicContent
+    {
+        public Post()
+        {
+            ContentType = DynamicContentType.Html;
+        }
 
-		public string Id { get; set; }
+        public string Id { get; set; }
 
-		public string Title { get; set; }
-		public string LegacySlug { get; set; }
+        public string Title { get; set; }
+        public string LegacySlug { get; set; }
 
-		public string Body { get; set; }
-		public DynamicContentType ContentType { get; set; }
-		public ICollection<string> Tags { get; set; }
+        public string Body { get; set; }
+        public DynamicContentType ContentType { get; set; }
+        public ICollection<string> Tags { get; set; }
 
-		public string AuthorId { get; set; }
-		public DateTimeOffset CreatedAt { get; set; }
-		public DateTimeOffset PublishAt { get; set; }
-		public bool SkipAutoReschedule { get; set; }
+        public string AuthorId { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset PublishAt { get; set; }
+        public bool SkipAutoReschedule { get; set; }
 
-		public string LastEditedByUserId { get; set; }
-		public DateTimeOffset? LastEditedAt { get; set; }
+        public string LastEditedByUserId { get; set; }
+        public DateTimeOffset? LastEditedAt { get; set; }
 
-		public bool IsDeleted { get; set; }
-		public bool AllowComments { get; set; }
+        public bool IsDeleted { get; set; }
+        public bool AllowComments { get; set; }
 
-		private Guid _showPostEvenIfPrivate;
-		public Guid ShowPostEvenIfPrivate
-		{
-			get
-			{
-				if (_showPostEvenIfPrivate == Guid.Empty)
-					_showPostEvenIfPrivate = Guid.NewGuid();
-				return _showPostEvenIfPrivate;
-			}
-			set { _showPostEvenIfPrivate = value; }
-		}
+        private Guid _showPostEvenIfPrivate;
+        public Guid ShowPostEvenIfPrivate
+        {
+            get
+            {
+                if (_showPostEvenIfPrivate == Guid.Empty)
+                    _showPostEvenIfPrivate = Guid.NewGuid();
+                return _showPostEvenIfPrivate;
+            }
+            set { _showPostEvenIfPrivate = value; }
+        }
 
-		public int CommentsCount { get; set; }
-		public string CommentsId { get; set; }
+        public int CommentsCount { get; set; }
+        public string CommentsId { get; set; }
 
-		public IEnumerable<string> TagsAsSlugs
-		{
-			get
-			{
-				if (Tags == null)
-					yield break;
-				foreach (var tag in Tags)
-				{
-					yield return SlugConverter.TitleToSlug(tag);
-				}
-			}
-		}
+        public IEnumerable<string> TagsAsSlugs
+        {
+            get
+            {
+                if (Tags == null)
+                    yield break;
+                foreach (var tag in Tags)
+                {
+                    yield return SlugConverter.TitleToSlug(tag);
+                }
+            }
+        }
 
-		public bool IsPublicPost(Guid key)
-		{
-		    
-		    if (IsDeleted)
-		        return false;
+        public bool IsPublicPost(Guid key)
+        {
 
-		    if (PublishAt <= DateTimeOffset.Now)
-		        return true;
+            if (IsDeleted)
+                return false;
 
-		    return key != Guid.Empty && key == ShowPostEvenIfPrivate;
-		}
-	}
+            if (PublishAt <= DateTimeOffset.Now)
+                return true;
 
-	public class PostInput
-	{
-		[HiddenInput]
-		public int Id { get; set; }
+            return key != Guid.Empty && key == ShowPostEvenIfPrivate;
+        }
+    }
 
-		[Required]
-		[Display(Name = "Title")]
-		public string Title { get; set; }
+    public class PostInput
+    {
+        [HiddenInput]
+        public int Id { get; set; }
 
-		[AllowHtml]
-		[Required]
-		[Display(Name = "Body")]
-		[DataType(DataType.MultilineText)]
-		public string Body { get; set; }
+        [Required]
+        [Display(Name = "Title")]
+        public string Title { get; set; }
 
-		[Required]
-		[Display(Name = "Content type")]
-		public DynamicContentType ContentType { get; set; }
+        [AllowHtml]
+        [Required]
+        [Display(Name = "Body")]
+        [DataType(DataType.MultilineText)]
+        public string Body { get; set; }
 
-		[Display(Name = "Created At")]
-		[DataType(DataType.DateTime)]
-		public DateTimeOffset CreatedAt { get; set; }
+        [Required]
+        [Display(Name = "Content type")]
+        public DynamicContentType ContentType { get; set; }
 
-		[Display(Name = "Publish At")]
+        [Display(Name = "Created At")]
         [DataType(DataType.DateTime)]
-		public DateTimeOffset PublishAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
-		[Display(Name = "Tags")]
-		public string Tags { get; set; }
+        [Display(Name = "Publish At")]
+        [DataType(DataType.DateTime)]
+        public DateTimeOffset PublishAt { get; set; }
 
-		[Display(Name = "Allow Comments?")]
-		public bool AllowComments { get; set; }
+        [Display(Name = "Tags")]
+        public string Tags { get; set; }
 
-		public bool IsNewPost()
-		{
-			return Id == 0;
-		}
-	}
+        [Display(Name = "Allow Comments?")]
+        public bool AllowComments { get; set; }
+
+        public bool IsNewPost()
+        {
+            return Id == 0;
+        }
+    }
 }

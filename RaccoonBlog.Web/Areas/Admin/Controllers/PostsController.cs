@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Mime;
 using System.Web.Mvc;
@@ -68,20 +69,23 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(true)]
         public ActionResult Update(TempInput sendInfo)
-        //public ActionResult Update(PostInput input, string publish)
+        //public ActionResult Update(PostInput input, string publish)////////////////////////
         {
 
 
 
             //var post = RavenSession.Load<Post>(input.Id) ?? new Post { CreatedAt = DateTimeOffset.Now };//Post is en empty tool here
+            ////////////////
 
+
+            sendInfo.Id = "0";
             var post = RavenSession.Load<Post>(sendInfo.Id) ?? new Post { CreatedAt = DateTimeOffset.Now };//Post is en empty tool here
 
             var publishChanged = true;// To verify if the Publish date was changed
             if (post.PublishAt == DateTimeOffset.MinValue)
                 publishChanged = false;
 
-            //  input.MapPropertiesToInstance(post);//Entering data
+            //input.MapPropertiesToInstance(post);//Entering data  ///////////////////////
 
             post.Title = sendInfo.Title;
             if (sendInfo.AllowComments == "yes")
@@ -89,7 +93,21 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
             else post.AllowComments = false;
             post.Body = sendInfo.Body;
             post.CreatedAt = DateTimeOffset.Now;
-            // post.PublishAt = (DateTimeOffset) sendInfo.PublishAt;
+
+            //convert PublishAt (string) into dateTime
+            string mm = sendInfo.PublishAt.Substring(0, 2);
+            int mmInt = int.Parse(mm);
+            string dd = sendInfo.PublishAt.Substring(3,2);
+            int ddInt = int.Parse(dd);
+            string yy = sendInfo.PublishAt.Substring(6, 4);
+            int yyInt = int.Parse(yy);
+            DateTime TempDate=new DateTime(yyInt,mmInt,ddInt); //convert into date
+           
+            DateTimeOffset TempDateOffSet=new DateTimeOffset(TempDate);//temp dateTimeOffSet
+            post.PublishAt = TempDateOffSet;
+
+            //entering the tag
+        //    post.Tags.Add(sendInfo.PublishAt);                         RETURN TO IT !!!
 
 
 
@@ -97,13 +115,13 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
 
 
 
-            var day = post.PublishAt.Day;
-            var month = post.PublishAt.Month;
-            var year = post.PublishAt.Year;
-            post.PublishAt = DateTimeOffset.Parse(day + "/" + month + "/" + year);
+            //var day = post.PublishAt.Day; // not relevant
+            //var month = post.PublishAt.Month;
+            //var year = post.PublishAt.Year;
+            //post.PublishAt = DateTimeOffset.Parse(day + "/" + month + "/" + year);
 
-            //if (!ModelState.IsValid)
-            //    return View("Edit", input);
+            //if (!ModelState.IsValid)             ////////////////////
+            //    return View("Edit", input);    //////////////////
 
             // Be able to record the user making the actual post
             var user = RavenSession.GetCurrentUser();
@@ -117,7 +135,7 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
                 post.LastEditedAt = DateTimeOffset.Now;
             }
 
-            //if (post.PublishAt == DateTimeOffset.MinValue)
+            if (post.PublishAt == DateTimeOffset.MinValue)
             if (publishChanged == false)
             {
                 var postScheduleringStrategy = new PostSchedulingStrategy(RavenSession, DateTimeOffset.Now);
@@ -129,23 +147,23 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
             // Actually save the post now
             RavenSession.Store(post);
 
-            //if (input.IsNewPost())
+            //if (input.IsNewPost())    //////////////////////
             //{
-            //    // Create the post comments object and link between it and the post
-            //    var comments = new PostComments
-            //                   {
-            //                       Comments = new List<PostComments.Comment>(),
-            //                       Spam = new List<PostComments.Comment>(),
-            //                       Post = new PostComments.PostReference
-            //                              {
-            //                                  Id = post.Id,
-            //                                  PublishAt = post.PublishAt,
-            //                              }
-            //                   };
+                // Create the post comments object and link between it and the post
+                var comments = new PostComments
+                               {
+                                   Comments = new List<PostComments.Comment>(),
+                                   Spam = new List<PostComments.Comment>(),
+                                   Post = new PostComments.PostReference
+                                          {
+                                              Id = post.Id,
+                                              PublishAt = post.PublishAt,
+                                          }
+                               };
 
-            //    RavenSession.Store(comments);
-            //    post.CommentsId = comments.Id;
-            //}
+                RavenSession.Store(comments);
+                post.CommentsId = comments.Id;
+            //}                   ////////////////
 
             return RedirectToAction("Details", new { Id = post.MapTo<PostReference>().DomainId });
         }
