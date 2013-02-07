@@ -1,45 +1,125 @@
 ﻿@using RaccoonBlog.Web.Models
 @model PostInput
 @{
-	ViewBag.Title = @Model.Title;
+    ViewBag.Title = @Model.Title;
 }
 @if (ViewData.ModelState.IsValid == false)
-{ 
-	<div class="form-error">
-		@Html.ValidationSummary(true)
-	</div>
+{    
+    <div class="form-error">
+        @Html.ValidationSummary(true)
+    </div>
 }
 <article id="user-input">
-	<div id="page-heading">
-		<h1>@(Model.IsNewPost() ? "Create a new post" : "Edit Post")</h1>
-	</div>
-	@using (Html.BeginForm("Update", "Posts"))
-	{
-		<div>
-			<div id="content-table-inner" class="inputform">
-				<div id="id-form" style="top: 0;">
-					@Html.EditorFor(x => x.Title)
-					@Html.TextAreaFor(x => x.Body, new {@class = "adminRichText"})
-					@Html.EditorFor(x => x.CreatedAt)
-					@Html.EditorFor(x => x.PublishAt)
-					@Html.EditorFor(x => x.Tags)
-					@Html.EditorFor(x => x.AllowComments)
-					@Html.HiddenFor(x => x.Id)
-					<div><input type="submit" value="Update Post"></div>
-				</div>
-			</div>
-		</div>
-	}
+    
+    <div id="page-heading">
+        <h1>@(Model.IsNewPost() ? "Create a new post" : "Edit Post")</h1>
+    </div>
+    @using (Html.BeginForm("Update", "Posts"))
+    {
+        <div>
+
+            <div id="content-table-inner" class="inputform">
+                <div id="id-form" style="top: 0;">
+                    
+                 
+                    @*first way*@
+
+
+                    @*         @Html.EditorFor(x => x.Title)
+                    @Html.TextAreaFor(x => x.Body, new { @class = "adminRichText" })
+                    @Html.EditorFor(x => x.CreatedAt)
+                    <b>Publish date:</b>
+                    @Html.TextBoxFor(x => x.PublishAt)
+                    <br/>
+                    (If you won't enter a date the post will be published today)
+                      @Html.EditorFor(x => x.Tags)
+                    
+                     @Html.EditorFor(x => x.AllowComments)
+                        @Html.HiddenFor(x => x.Id)*@
+                    
+
+                    @*Second way*@
+                    
+
+                    <br/>
+                    Title:
+                    <input name="Title" id="Title" size="25">
+                    <br/>
+                    TextArea:
+                    <input name="TextArea" id="TextArea" size="25">
+                    <br/>
+                    Publish at:
+                    <input name="PublishAt" id="PublishAt" size="25">
+                    <br/>
+                    Tags:
+                    <input name="Tags" id="Tags" size="25">
+                    <br/>
+                    Allow Comments:
+                    <input type="checkbox" name="AllowComments" id="AllowComments" size="25">
+                    <br/>
+                    
+
+
+                    <div>
+                        <input id="UpdateBtn" type="submit" value="Update Post">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
 </article>
 <div class="clear">
-	&nbsp;</div>
+    &nbsp;
+</div>
+
 @section Script {
-	<script type="text/javascript" src="@Url.Script("ckeditor/ckeditor.js")"></script>
-	<script type="text/javascript" src="@Url.Script("ckeditor/adapters/jquery.js")"></script>
-	<script type="text/javascript">
-		jQuery(document).ready(function () {
-			jQuery(".adminRichText").ckeditor();
-		});
-	
-	</script>
-}
+    <script type="text/javascript" src="@Url.Script("ckeditor/ckeditor.js")"></script>
+    <script type="text/javascript" src="@Url.Script("ckeditor/adapters/jquery.js")"></script>
+    <script type="text/javascript">
+        
+
+
+        jQuery(document).ready(function() {
+            jQuery(".adminRichText").ckeditor();
+
+            // AJAX
+            $('#UpdateBtn').click(function() {
+                var title = $('#Title').val();
+                var textArea = $('#TextArea').val();
+                var publishAt = $('#PublishAt').val();
+                var tags = $('#Tags').val();
+                
+                //var  allowComments = $('#AllowComments').val();
+                if ($('#AllowComments').attr('checked')) {
+                    
+               
+                    var allowComments = 'yes';
+                }
+                else var allowComments = 'no';
+                    
+                
+                var sendInfo = { Title: title, TextArea: textArea, PublishAt: publishAt, Tags: tags, AllowComments: allowComments };
+                $.ajax({
+                    url: "/admin/Posts/Update",
+                    type: "POST",
+                    data: sendInfo,
+                    dataType: "Json",
+                    beforeSend: function() { $('#LoadingPic').show(); },
+                    success: function() {
+                        $('#content-table-inner2').show();
+
+                    },
+                    error: function() { alert('Error'); },
+                    complete: function() { $('#LoadingPic').hide(); },
+                    timeout: 10000
+                });
+
+
+            });
+
+            // END AJAX
+        });
+
+    </script>
+    }

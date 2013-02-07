@@ -20,15 +20,14 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult post(UserInput SendInfo)
+        public ActionResult Post(UserInput SendInfo)
         {
             User newUser = new User();
             newUser.Email = SendInfo.Email;
             newUser.SetPassword(SendInfo.Password);
             RavenSession.Store(newUser);
 
-            //return Json(new { success = true });
-            return Json(new { x='1'});
+            return Json(new { success = true });
         }
         public class UserInput
         {

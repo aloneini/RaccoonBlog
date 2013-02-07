@@ -35,7 +35,7 @@ namespace RaccoonBlog.Web.Services
 				.FirstOrDefault();
 
 			var lastScheduledPostDate = p == null || p.PublishAt < now ? now : p.PublishAt;
-			return lastScheduledPostDate
+			return lastScheduledPostDate // changing the date
 				.AddDays(1)
 				.SkipToNextWorkDay()
 				.AtNoon();

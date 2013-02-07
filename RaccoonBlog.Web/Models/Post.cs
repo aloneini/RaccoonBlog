@@ -69,13 +69,14 @@ namespace RaccoonBlog.Web.Models
 
 		public bool IsPublicPost(Guid key)
 		{
-			if (IsDeleted)
-				return false;
+		    
+		    if (IsDeleted)
+		        return false;
 
-			if (PublishAt <= DateTimeOffset.Now)
-				return true;
+		    if (PublishAt <= DateTimeOffset.Now)
+		        return true;
 
-			return key != Guid.Empty && key == ShowPostEvenIfPrivate;
+		    return key != Guid.Empty && key == ShowPostEvenIfPrivate;
 		}
 	}
 
@@ -103,7 +104,7 @@ namespace RaccoonBlog.Web.Models
 		public DateTimeOffset CreatedAt { get; set; }
 
 		[Display(Name = "Publish At")]
-		[DataType(DataType.DateTime)]
+        [DataType(DataType.DateTime)]
 		public DateTimeOffset PublishAt { get; set; }
 
 		[Display(Name = "Tags")]

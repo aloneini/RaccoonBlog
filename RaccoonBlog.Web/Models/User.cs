@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace RaccoonBlog.Web.Models
 		public string FullName { get; set; }
 		public string Email { get; set; }
 		public bool Enabled { get; set; }
+        public ArrayList Posts = new ArrayList();//???????????// 
 
 		// User's settings
 		public string TwitterNick { get; set; }
