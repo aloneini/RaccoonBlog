@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Net.Mime;
@@ -74,51 +75,43 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
 
 
 
-            //var post = RavenSession.Load<Post>(input.Id) ?? new Post { CreatedAt = DateTimeOffset.Now };//Post is en empty tool here
+            //var post = RavenSession.Load<Post>(input.Id) ?? new Post { CreatedAt = DateTimeOffset.Now };//Post is an empty tool here
             ////////////////
 
 
             sendInfo.Id = "0";
-            var post = RavenSession.Load<Post>(sendInfo.Id) ?? new Post { CreatedAt = DateTimeOffset.Now };//Post is en empty tool here
+            var post = RavenSession.Load<Post>(sendInfo.Id) ?? new Post { CreatedAt = DateTimeOffset.Now };//Post is an empty tool here
 
-            var publishChanged = true;// To verify if the Publish date was changed
-            if (post.PublishAt == DateTimeOffset.MinValue)
-                publishChanged = false;
 
             //input.MapPropertiesToInstance(post);//Entering data  ///////////////////////
 
             post.Title = sendInfo.Title;
-            if (sendInfo.AllowComments == "yes")
+            if (sendInfo.AllowComments == "on")
                 post.AllowComments = true;
             else post.AllowComments = false;
             post.Body = sendInfo.Body;
             post.CreatedAt = DateTimeOffset.Now;
 
-            //convert PublishAt (string) into dateTime
+            //Convert PublishAt (string) into dateTime
             string mm = sendInfo.PublishAt.Substring(0, 2);
             int mmInt = int.Parse(mm);
             string dd = sendInfo.PublishAt.Substring(3,2);
             int ddInt = int.Parse(dd);
             string yy = sendInfo.PublishAt.Substring(6, 4);
             int yyInt = int.Parse(yy);
-            DateTime TempDate=new DateTime(yyInt,mmInt,ddInt); //convert into date
-           
-            DateTimeOffset TempDateOffSet=new DateTimeOffset(TempDate);//temp dateTimeOffSet
+            // Convert into date
+            DateTime TempDate=new DateTime(yyInt,mmInt,ddInt);
+            // Convert into DateTimeOffset
+            DateTimeOffset TempDateOffSet=new DateTimeOffset(TempDate);
+            // Entering the date into post
             post.PublishAt = TempDateOffSet;
 
-            //entering the tag
-        //    post.Tags.Add(sendInfo.PublishAt);                         RETURN TO IT !!!
-
-
-
-
-
-
-
-            //var day = post.PublishAt.Day; // not relevant
-            //var month = post.PublishAt.Month;
-            //var year = post.PublishAt.Year;
-            //post.PublishAt = DateTimeOffset.Parse(day + "/" + month + "/" + year);
+           // Entering the tag
+            string tempTag = sendInfo.Tags;
+            ICollection<string> t=new Collection<string>();
+            t.Add(tempTag);
+            post.Tags.Add(tempTag);
+            
 
             //if (!ModelState.IsValid)             ////////////////////
             //    return View("Edit", input);    //////////////////
@@ -135,8 +128,8 @@ namespace RaccoonBlog.Web.Areas.Admin.Controllers
                 post.LastEditedAt = DateTimeOffset.Now;
             }
 
-            if (post.PublishAt == DateTimeOffset.MinValue)
-            if (publishChanged == false)
+            if (post.PublishAt <= DateTimeOffset.Now)
+           
             {
                 var postScheduleringStrategy = new PostSchedulingStrategy(RavenSession, DateTimeOffset.Now);
                 post.PublishAt = postScheduleringStrategy.Schedule();

@@ -12,17 +12,46 @@
 }
 <article id="user-input">
     <style>
-		/* css for timepicker */
-		.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
-		.ui-timepicker-div dl { text-align: left; }
-		.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
-		.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
-		.ui-timepicker-div td { font-size: 90%; }
-		.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
-	</style>
+        /* css for timepicker */
+        .ui-timepicker-div .ui-widget-header
+        {
+            margin-bottom: 8px;
+        }
+
+        .ui-timepicker-div dl
+        {
+            text-align: left;
+        }
+
+            .ui-timepicker-div dl dt
+            {
+                height: 25px;
+                margin-bottom: -25px;
+            }
+
+            .ui-timepicker-div dl dd
+            {
+                margin: 0 10px 10px 65px;
+            }
+
+        .ui-timepicker-div td
+        {
+            font-size: 90%;
+        }
+
+        .ui-tpicker-grid-label
+        {
+            background: none;
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 
     <div id="page-heading">
-        <h1>@(Model.IsNewPost() ? "Create a new post" : "Edit Post")</h1>
+        <u>
+            <h1>@(Model.IsNewPost() ? "Create a new post" : "Edit Post")</h1>
+        </u>
     </div>
     @using (Html.BeginForm("Update", "Posts"))
     {
@@ -35,7 +64,7 @@
                     @*first way*@
 
 
-@*                    @Html.EditorFor(x => x.Title)
+                    @*                    @Html.EditorFor(x => x.Title)
                     @Html.TextAreaFor(x => x.Body, new { @class = "adminRichText" })
                     @Html.EditorFor(x => x.CreatedAt)
                     <b>Publish date:</b>
@@ -54,27 +83,33 @@
 
                     @*Second way*@
 
-                     <br />
-                    <b>Title:</b>
+                    <br />
+                    <b id="bTitle">Title:</b>
                     <input name="Title" id="Title" size="25">
-                    <br /><br/>
-                    <b>Text Area:</b> <br/>
-                    <textarea rows="15" cols="100" name="TextArea" id="TextArea" @*size="25"*@></textArea>
-                    <br /><br/>
-                   <b> Publish at:</b>
+                    <br />
+                    <br />
+                    <b>Text Area:</b>
+                    <br />
+                    <textarea rows="15" cols="100" name="TextArea" id="TextArea" @*size="25"*@></textarea>
+                    <br />
+                    <br />
+                    <b>Publish at:</b>
                     <input type="text" name="PublishAt" id="PublishAt" size="27" />
-                    <br /><br/>
+                    <br />
+                    <br />
                     <b>Tags:</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                     <input name="Tags" id="Tags" size="25">
-                    <br /><br/>
+                    <br />
+                    <br />
                     <b>Allow Comments </b>&nbsp&nbsp 
                     <input type="checkbox" name="AllowComments" id="AllowComments" size="25">
-                    <br /><br/>
+                    <br />
+                    <br />
 
 
 
                     <div>
-                        <input id="UpdateBtn" type="submit" value="Update Post">
+                        <input id="UpdateBtn" type="submit" value="Update post">
                         <img id="LoadingPic" src="@Url.Content("~/Content/css/images/ajax-loader%20(6).gif")" />
                     </div>
                 </div>
@@ -99,10 +134,6 @@
             $('#LoadingPic').hide();
             $('#Title').focus();
             $("#PublishAt").datepicker();
-            initialize();
-            $('#When').datetimepicker({
-                dateFormat: 'dd/mm/yy'
-            });
 
             // AJAX
             $('#UpdateBtn').click(function () {
@@ -110,13 +141,10 @@
                 var body = $('#TextArea').val();
                 var publishAt = $('#PublishAt').val();
                 var tags = $('#Tags').val();
-                debugger;
-                
-
-
+                var allowComments;
                 if ($('#AllowComments').attr('checked'))
-                    var allowComments = 'yes';
-                else var allowComments = 'no';
+                    allowComments = 'yes';
+                else allowComments = 'no';
 
 
                 var sendInfo = { Title: title, Body: body, createdAt: 0, PublishAt: publishAt, Tags: tags, AllowComments: allowComments, Id: 0 };

@@ -252,6 +252,15 @@ footer
 	background-image: radial-gradient(ellipse farthest-side at right bottom, #BABABA 0%, #575757 100%);
 }
 
+#UpdateBtn {
+ color: #212121
+}
+
+#UpdateBtn:hover {
+ color: orange
+}  
+
+
 #content-table-inner
 {
 	border: 1px;

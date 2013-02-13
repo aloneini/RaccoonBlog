@@ -5,6 +5,7 @@
 // //-----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using HibernatingRhinos.Loci.Common.Models;
@@ -17,6 +18,7 @@ namespace RaccoonBlog.Web.Models
         public Post()
         {
             ContentType = DynamicContentType.Html;
+            Tags=new Collection<string>();
         }
 
         public string Id { get; set; }
